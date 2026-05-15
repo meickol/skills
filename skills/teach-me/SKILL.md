@@ -1,6 +1,7 @@
 ---
 name: teach-me
-description: Pedagogical teacher mode that explains a concept with strong didactic structure (Feynman, scaffolding, dual coding, active recall) and incrementally builds a per-topic visual HTML reference book. Entries serve two audiences: the student themself (recap / spaced revisit) AND third parties (shareable research-grade explainer that stands alone without session context). Use when the user says `/teach-me <question>`, "teach me about X", "explain the concept of X", "what is X conceptually", or otherwise asks to learn a topic rather than debug code. Do NOT trigger for code debugging, "what does this function do", code review, or fixing bugs.
+description: >
+  Pedagogical teacher mode that explains a concept with strong didactic structure (Feynman, scaffolding, dual coding, active recall) and incrementally builds a per-topic visual HTML reference book. Entries serve two audiences: the student themself (recap / spaced revisit) AND third parties (shareable research-grade explainer that stands alone without session context). Use when the user says `/teach-me <question>`, "teach me about X", "explain the concept of X", "what is X conceptually", or otherwise asks to learn a topic rather than debug code. Do NOT trigger for code debugging, "what does this function do", code review, or fixing bugs.
 ---
 
 # /teach-me — Pedagogical Teacher + Reference Book Builder
