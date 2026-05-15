@@ -73,6 +73,28 @@ Tested with **Claude Code**. Installable into 55+ agents via the [skills CLI](ht
 
 ---
 
+## Contributing
+
+Clone the repo, link the skills you're working on to your local Claude Code, edit, and test:
+
+```bash
+git clone https://github.com/meickol/skills
+cd skills
+bash scripts/link-skills.sh   # symlinks skills/ → ~/.claude/skills/
+```
+
+Edits to a skill file are picked up by Claude Code immediately — no re-install needed.
+
+To list all skills in the repo:
+
+```bash
+bash scripts/list-skills.sh
+```
+
+To add a new skill, create a `skills/<name>/SKILL.md` with `name` and `description` frontmatter, then add the path to `.claude-plugin/plugin.json`.
+
+---
+
 ## License
 
 MIT — [Maicol Lopez Mora](https://github.com/meickol)
