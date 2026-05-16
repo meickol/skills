@@ -107,6 +107,44 @@ Universal fallback:
 
 Record every source: **URL + date fetched**. These go in the entry's Sources section.
 
+## First-run initialization
+
+If `~/.claude/teaching/` does not exist, create the full structure before doing anything else:
+
+```bash
+mkdir -p ~/.claude/teaching
+```
+
+Then create these files:
+
+**`~/.claude/teaching/GLOBAL_INDEX.md`** — create with header row only:
+```
+| slug | title | topic | tags | created | updated | summary |
+|---|---|---|---|---|---|---|
+```
+
+**`~/.claude/teaching/global-index.json`** — create as empty array:
+```json
+[]
+```
+
+Do NOT create `global-index.html` yet — generate it the first time an entry is saved (Step 6b).
+
+When creating a new topic for the first time (`~/.claude/teaching/<topic>/` doesn't exist):
+```bash
+mkdir -p ~/.claude/teaching/<topic>/entries
+mkdir -p ~/.claude/teaching/<topic>/assets
+```
+Then copy `templates/style.css` → `~/.claude/teaching/<topic>/assets/style.css`.
+
+Create `~/.claude/teaching/<topic>/INDEX.md` with header row:
+```
+| slug | title | tags | created | updated | description |
+|---|---|---|---|---|---|
+```
+
+Do NOT create `<topic>/index.html` yet — generate it after the first entry is saved.
+
 ## Step 4: Resolve topic (once per session)
 
 Topic = the book the entry belongs to (e.g., `nextjs`, `rust`, `databases`). Session-sticky after first resolution.
