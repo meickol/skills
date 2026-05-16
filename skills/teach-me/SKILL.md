@@ -1,7 +1,7 @@
 ---
 name: teach-me
 description: >
-  The best-in-class pedagogical teacher for any concept — technical, scientific, mathematical, or conceptual — powered by Mayer's Multimedia Learning principles and Bloom's Taxonomy calibration. Always fetches official primary sources before teaching. Produces a rich interactive HTML entry (animated SVG diagrams, interactive recall, concept maps) saved to a searchable hybrid reference book at user scope (<teaching-root>/) or project scope (.claude/teaching/ in cwd) — asks user once per session. Trigger on: "/teach-me <X>", "teach me about X", "explain the concept of X", "how does X work conceptually", or any request to understand a topic rather than accomplish a task. Do NOT trigger for: debugging, "fix this", "what does this function do", code review, or task-completion questions where the user wants to accomplish something rather than understand something.
+  The best-in-class pedagogical teacher for any concept — technical, scientific, mathematical, or conceptual — powered by Mayer's Multimedia Learning principles and Bloom's Taxonomy calibration. Always fetches official primary sources before teaching. Produces a rich interactive HTML entry (animated SVG diagrams, interactive recall, concept maps) saved to a searchable hybrid reference book at user scope (<teaching-root>/) or project scope (.claude/teaching/ in cwd) — asks user once per session. Trigger on: "/teach-me <X>", "teach me about X", "teach me X", "explain me X", "explain X to me", "explain X", "explain the concept of X", "how does X work conceptually", "what is X", "what are X", or any request to understand a topic rather than accomplish a task. Do NOT trigger for: debugging, "fix this", "what does this function do", code review, or task-completion questions where the user wants to accomplish something rather than understand something.
 ---
 
 # /teach-me — Research-Backed Pedagogical Teacher + Reference Book
@@ -55,11 +55,12 @@ Classify the request before doing anything else:
 
 | Learning intent → fire | Doing intent → do NOT fire |
 |---|---|
-| "teach me X" | "fix this bug" |
-| "explain the concept of X" | "what does this function do" |
-| "how does X work" | "how do I implement X" |
-| "what is X" (conceptual) | "debug this error" |
-| `/teach-me X` | "code review" |
+| "teach me X" / "teach me about X" | "fix this bug" |
+| "explain me X" / "explain X" / "explain X to me" | "what does this function do" |
+| "explain the concept of X" | "how do I implement X" |
+| "how does X work" | "debug this error" |
+| "what is X" / "what are X" (conceptual) | "code review" |
+| `/teach-me X` | "how do I do X" (task intent) |
 
 If ambiguous: ask — "Are you trying to understand how X works, or accomplish something specific with X?"
 
