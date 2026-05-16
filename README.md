@@ -46,7 +46,7 @@ You spend 20 minutes getting a concept explained. The session ends. Tomorrow you
 
 **→ `/teach-me` fixes this.**
 
-It doesn't just explain — it teaches using the same principles cognitive scientists use to design effective instruction, then saves a polished interactive HTML entry to a searchable reference book at `~/.claude/teaching/`.
+It answers immediately — no setup questions, no friction — then lets you build a searchable reference book from the conversation, one question at a time.
 
 ```
 /teach-me React Server Components
@@ -58,17 +58,21 @@ It doesn't just explain — it teaches using the same principles cognitive scien
 
 **What makes it different:**
 
-**Built on Mayer's Multimedia Learning Theory.** Every entry follows Richard Mayer's 12 research-backed principles for learning from words and visuals (Coherence, Signaling, Spatial Contiguity, Segmenting, Pre-training, and more). The result: animated SVG diagrams, step-by-step interactive reveals, and concept maps — not walls of text.
+**Answers first, no friction.** Every question gets a short, direct answer immediately — 1–3 sentences and a concrete example. No setup questions block the first response. If you want to save it, you choose. If you just wanted a quick answer, you're done.
 
-**Calibrated to your level.** Before teaching, it asks where you're starting from — none / some exposure / working knowledge. That answer maps to Bloom's Taxonomy and controls visual complexity, explanation depth, and recall type. A beginner and an expert asking the same question get fundamentally different explanations.
+**The doc grows from the conversation.** Say yes once and a draft doc is created from your question. Ask a follow-up and you're offered to add it. Ask something different and that gets added too. The reference entry accumulates knowledge from actual questions you asked, not a pre-generated template.
 
-**Always fetches official sources first.** Never relies on training data alone. For a React question it queries context7 for current React docs. For a networking protocol it fetches the IETF RFC. For a math concept it reads NIST. Every entry cites the sources consulted with fetch dates, so you can verify currency.
+**Publish when it's ready.** Run `/teach-me generate <topic>` when you want HTML. It reads all the Q&A you've saved, curates what adds genuine new knowledge, synthesizes a full article with animated SVG diagrams and interactive recall, and opens it in the browser. `/teach-me generate <topic> <slug>` targets a single entry.
 
-**Adaptive interactive recall.** Beginners get a clickable quiz with immediate feedback. Advanced learners get open-ended "what would happen if…" questions with no safety net — the retrieval attempt is the point.
+**Never repeats itself.** If you ask the same concept twice in a session — because it didn't click the first time — it switches tactic automatically: different example, real-world analogy, ELI5, inverse approach, or step-by-step trace. If you have a doc, it offers to revise the explanation there too.
 
-**A hybrid reference book, not just files.** Entries are cross-linked bidirectionally. A global search index lets you find any concept across all topics instantly. Filter by topic, tag, or level. Share any entry — it reads like a published article, not a personal note.
+**Setup questions happen once.** The first time you save anything, it asks where to keep your library (user-wide or project-scoped) and which topic book to use. That's it for the session — every subsequent save skips straight to writing.
 
-The book grows every time you learn something. Come back to it, share it, build on it.
+**Built on Mayer's Multimedia Learning Theory.** Every generated entry follows Richard Mayer's 12 research-backed principles: animated SVG diagrams, step-by-step interactive reveals, concept maps. Calibrated to your level — beginner, some exposure, or working knowledge — which controls visual complexity, explanation depth, and recall type.
+
+**Always fetches official sources before persisting.** When you say "add to doc", it fetches current docs first — context7 for libraries, IETF RFCs for protocols, NIST for security, official language docs for languages. Every entry cites sources with fetch dates.
+
+**A hybrid reference book, not just files.** Entries are cross-linked bidirectionally. A global search index lets you find any concept across all topics instantly. Filter by topic, tag, or level. Every entry reads like a published article — shareable, not a personal note.
 
 ---
 
@@ -77,7 +81,8 @@ The book grows every time you learn something. Come back to it, share it, build 
 | Skill | Trigger | What it produces |
 |---|---|---|
 | `html` | `/html` or any structured output request | Self-contained `.html` file: tabs, diagrams, decks, reports |
-| `teach-me` | `/teach-me <concept>` | Mayer-calibrated explanation + animated HTML entry + searchable reference book |
+| `teach-me` | `/teach-me <concept>` | Short answer immediately. Optionally grows a `source.md` doc from Q&A. |
+| `teach-me generate` | `/teach-me generate <topic>` | Synthesizes saved Q&A into a full Mayer-calibrated HTML article with SVG diagrams. |
 
 ---
 
