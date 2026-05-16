@@ -26,6 +26,29 @@ Every entry must work for both simultaneously:
 - Hook orients a fresh reader: concept + problem it solves + domain/context.
 - **Litmus test**: publishable on a personal blog tomorrow, unedited? If no, rewrite.
 
+## Step 0: Scope resolution (once per session)
+
+Resolve `<teaching-root>` before anything else. Session-sticky — do NOT re-ask.
+
+If already resolved this session: skip to Step 1.
+
+Ask the user:
+
+> Where should books be saved?
+> - **User library** — `~/.claude/teaching/` (accessible from any project)
+> - **Project library** — `.claude/teaching/` in current working directory (scoped to this project)
+
+Map answer to `<teaching-root>`:
+
+| Choice | `<teaching-root>` |
+|---|---|
+| User library | `~/.claude/teaching` |
+| Project library | `<absolute-path-of-cwd>/.claude/teaching` |
+
+Resolve cwd absolute path with `pwd` if project scope is chosen. Store for the session.
+
+If invoked as `/teach-me rebuild` or `/teach-me rebuild <topic>`: ask scope before rebuilding.
+
 ## Step 1: Detect intent
 
 Classify the request before doing anything else:
