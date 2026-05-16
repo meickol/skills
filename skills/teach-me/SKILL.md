@@ -1,14 +1,14 @@
 ---
 name: teach-me
 description: >
-  The best-in-class pedagogical teacher for any concept — technical, scientific, mathematical, or conceptual — powered by Mayer's Multimedia Learning principles and Bloom's Taxonomy calibration. Always fetches official primary sources before teaching. Produces a rich interactive HTML entry (animated SVG diagrams, interactive recall, concept maps) saved to a searchable hybrid reference book at ~/.claude/teaching/. Trigger on: "/teach-me <X>", "teach me about X", "explain the concept of X", "how does X work conceptually", or any request to understand a topic rather than accomplish a task. Do NOT trigger for: debugging, "fix this", "what does this function do", code review, or task-completion questions where the user wants to accomplish something rather than understand something.
+  The best-in-class pedagogical teacher for any concept — technical, scientific, mathematical, or conceptual — powered by Mayer's Multimedia Learning principles and Bloom's Taxonomy calibration. Always fetches official primary sources before teaching. Produces a rich interactive HTML entry (animated SVG diagrams, interactive recall, concept maps) saved to a searchable hybrid reference book at user scope (<teaching-root>/) or project scope (.claude/teaching/ in cwd) — asks user once per session. Trigger on: "/teach-me <X>", "teach me about X", "explain the concept of X", "how does X work conceptually", or any request to understand a topic rather than accomplish a task. Do NOT trigger for: debugging, "fix this", "what does this function do", code review, or task-completion questions where the user wants to accomplish something rather than understand something.
 ---
 
 # /teach-me — Research-Backed Pedagogical Teacher + Reference Book
 
 Two jobs:
 1. Teach the concept using Mayer's Multimedia Learning principles, calibrated to learner level, grounded in official sources fetched in real time.
-2. Persist the explanation as a rich interactive HTML entry in a searchable hybrid reference book at `~/.claude/teaching/`.
+2. Persist the explanation as a rich interactive HTML entry in a searchable hybrid reference book at `<teaching-root>/`.
 
 See `references/pedagogy.md` for the full theoretical framework (Mayer, Bloom, Cognitive Load Theory, source hierarchy by domain).
 
@@ -114,35 +114,35 @@ Record every source: **URL + date fetched**. These go in the entry's Sources sec
 
 ## First-run initialization
 
-If `~/.claude/teaching/` does not exist, create the full structure before doing anything else:
+If `<teaching-root>/` does not exist, create the full structure before doing anything else:
 
 ```bash
-mkdir -p ~/.claude/teaching
+mkdir -p <teaching-root>
 ```
 
 Then create these files:
 
-**`~/.claude/teaching/GLOBAL_INDEX.md`** — create with header row only:
+**`<teaching-root>/GLOBAL_INDEX.md`** — create with header row only:
 ```
 | slug | title | topic | tags | created | updated | summary |
 |---|---|---|---|---|---|---|
 ```
 
-**`~/.claude/teaching/global-index.json`** — create as empty array:
+**`<teaching-root>/global-index.json`** — create as empty array:
 ```json
 []
 ```
 
 Do NOT create `global-index.html` yet — generate it the first time an entry is saved (Step 6b).
 
-When creating a new topic for the first time (`~/.claude/teaching/<topic>/` doesn't exist):
+When creating a new topic for the first time (`<teaching-root>/<topic>/` doesn't exist):
 ```bash
-mkdir -p ~/.claude/teaching/<topic>/entries
-mkdir -p ~/.claude/teaching/<topic>/assets
+mkdir -p <teaching-root>/<topic>/entries
+mkdir -p <teaching-root>/<topic>/assets
 ```
-Then copy `templates/style.css` → `~/.claude/teaching/<topic>/assets/style.css`.
+Then copy `templates/style.css` → `<teaching-root>/<topic>/assets/style.css`.
 
-Create `~/.claude/teaching/<topic>/INDEX.md` with header row:
+Create `<teaching-root>/<topic>/INDEX.md` with header row:
 ```
 | slug | title | tags | created | updated | description |
 |---|---|---|---|---|---|
@@ -156,14 +156,14 @@ Topic = the book the entry belongs to (e.g., `nextjs`, `rust`, `databases`). Ses
 
 1. Inspect cwd: `package.json` deps, `Cargo.toml`, `pyproject.toml`, project `CLAUDE.md`, `README.md`.
 2. Map signals → slug. Examples: `next` dep → `nextjs`; `react` only → `react`; Cargo.toml → `rust`; no codebase → ask.
-3. If `~/.claude/teaching/<slug>/` exists, propose: `Use \`<slug>\` book?` and wait for confirm.
+3. If `<teaching-root>/<slug>/` exists, propose: `Use \`<slug>\` book?` and wait for confirm.
 4. If it does not exist, propose creating it.
 5. If no signal, ask: `Which topic book? (existing: <list>; or new slug)`.
 6. Remember for the session — do NOT re-ask.
 
 ## Step 5: Look up
 
-1. Read `~/.claude/teaching/GLOBAL_INDEX.md` + `~/.claude/teaching/<topic>/INDEX.md`.
+1. Read `<teaching-root>/GLOBAL_INDEX.md` + `<teaching-root>/<topic>/INDEX.md`.
 2. Semantic-match the question against entry titles, summaries, and tags.
 3. Decide: **match** or **no match**.
 
@@ -174,7 +174,7 @@ Reply with three things and stop:
 ```
 **TL;DR.** <2–3 sentence fresh recap — not copy-pasted from the entry.>
 
-Full entry: `~/.claude/teaching/<topic>/entries/<slug>/index.html`
+Full entry: `<teaching-root>/<topic>/entries/<slug>/index.html`
 
 Want me to expand this entry, go deeper on a sub-concept, or open it?
 ```
@@ -188,7 +188,7 @@ If **expand**: read `source.md`, decide *extend* (same concept, new H2) vs *new 
 **Phase 2 — Persist.** In order:
 
 1. Pick slug: short, kebab-case, concept-level (`server-components` not `what-are-server-components`).
-2. Create `~/.claude/teaching/<topic>/entries/<slug>/source.md`:
+2. Create `<teaching-root>/<topic>/entries/<slug>/source.md`:
    ```yaml
    ---
    slug: <slug>
@@ -209,14 +209,14 @@ If **expand**: read `source.md`, decide *extend* (same concept, new H2) vs *new 
 3. Propose cross-links: scan `GLOBAL_INDEX.md`, semantic-match top 2–4 entries, write to `related:`.
 4. Bidirectional update: for each related entry, append new slug to its `related:`, bump `updated:`, re-render its HTML.
 5. Render this entry's `index.html` (Step 8).
-6. Update `~/.claude/teaching/<topic>/INDEX.md`: append one-line entry (see `templates/index-prompt.md`).
-7. Update `~/.claude/teaching/GLOBAL_INDEX.md`: append one-line entry.
-8. Regenerate `~/.claude/teaching/global-index.json` from GLOBAL_INDEX.md (see Step 9).
-9. Regenerate `~/.claude/teaching/global-index.html` global landing page.
-10. Regenerate topic `~/.claude/teaching/<topic>/index.html`.
+6. Update `<teaching-root>/<topic>/INDEX.md`: append one-line entry (see `templates/index-prompt.md`).
+7. Update `<teaching-root>/GLOBAL_INDEX.md`: append one-line entry.
+8. Regenerate `<teaching-root>/global-index.json` from GLOBAL_INDEX.md (see Step 9).
+9. Regenerate `<teaching-root>/global-index.html` global landing page.
+10. Regenerate topic `<teaching-root>/<topic>/index.html`.
 11. Open the entry in the browser:
-    - macOS: `open ~/.claude/teaching/<topic>/entries/<slug>/index.html`
-    - Linux: `xdg-open ~/.claude/teaching/<topic>/entries/<slug>/index.html`
+    - macOS: `open <teaching-root>/<topic>/entries/<slug>/index.html`
+    - Linux: `xdg-open <teaching-root>/<topic>/entries/<slug>/index.html`
 12. End with one prompt and stop:
     ```
     Saved `<slug>` to `<topic>` book. Opened in browser. Cross-linked: <list>.
@@ -355,7 +355,7 @@ Do NOT call `/html` — skills cannot invoke each other. Follow `templates/entry
 ## Step 9: Book structure
 
 ```
-~/.claude/teaching/
+<teaching-root>/
   GLOBAL_INDEX.md          ← flat index of ALL entries across all topics
   global-index.json        ← JSON array for client-side search
   global-index.html        ← searchable + tag/topic-filterable global landing
