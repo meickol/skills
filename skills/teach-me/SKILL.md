@@ -370,9 +370,10 @@ Do NOT call `/html` — skills cannot invoke each other. Follow `templates/entry
 ```json
 [
   {
-    "id": "<slug>",
+    "id": "<topic>/<slug>",
     "title": "<title>",
     "topic": "<topic>",
+    "slug": "<slug>",
     "tags": ["tag1", "tag2"],
     "summary": "<one sentence>",
     "path": "<topic>/entries/<slug>/index.html",
@@ -381,6 +382,8 @@ Do NOT call `/html` — skills cannot invoke each other. Follow `templates/entry
   }
 ]
 ```
+
+Note: `id` is `"<topic>/<slug>"` (not just `"<slug>"`) to avoid collisions when two topics have entries with the same concept name (e.g., `nextjs/promises` vs `rust/promises`).
 
 **global-index.html features** (follow `templates/index-prompt.md`):
 - Client-side search: in-memory inverted index over title + summary + tags, built on load from `global-index.json`

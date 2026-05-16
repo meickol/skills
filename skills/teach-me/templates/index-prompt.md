@@ -195,10 +195,10 @@ Both: self-contained, no CDN, dark-mode aware. Anti-flash script in `<head>`.
       return (str || '').toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 2 && !stopWords.has(w));
     }
 
-    const index = {}; // word → Set of entry ids
+    const index = {}; // word → Set of entry ids (each id is "topic/slug")
     const byId = {};
     ENTRIES.forEach(entry => {
-      byId[entry.id] = entry;
+      byId[entry.id] = entry; // id = "<topic>/<slug>" — no collision across topics
       tokenize(entry.title + ' ' + entry.summary + ' ' + entry.tags.join(' ')).forEach(word => {
         if (!index[word]) index[word] = new Set();
         index[word].add(entry.id);
