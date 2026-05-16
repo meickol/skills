@@ -1,0 +1,82 @@
+{
+  "skill_name": "teach-me",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/teach-me how JavaScript promises work",
+      "expected_output": "Chat explanation using 7-section skeleton + saved interactive HTML entry at ~/.claude/teaching/*/entries/promises/index.html with animated visual, interactive quiz, and sources cited",
+      "calibration": "some",
+      "topic_domain": "programming/framework",
+      "checks": [
+        "Fetches official source (MDN or tc39) before answering",
+        "7 sections present: Hook, Key Components, Concrete Example, Visual Model, Deeper, Cross-links & Sources, Adaptive Recall",
+        "HTML entry saved and opened in browser",
+        "Visual Model contains an actual SVG or interactive element, not just text",
+        "Sources section lists fetched URL with date",
+        "Recall is interactive (multiple-choice or reveal) since calibration is Some",
+        "No session-context language in saved entry ('as we discussed', 'earlier you asked')"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "teach me about the CAP theorem, I have no background in distributed systems",
+      "expected_output": "Calibration inferred as None from 'no background'. Full explanation with Key Components as flip cards, animated step-by-step visual, and interactive quiz with feedback",
+      "calibration": "none (inferred)",
+      "topic_domain": "CS concept",
+      "checks": [
+        "Calibration inferred as None without asking (user stated 'no background')",
+        "Key Components rendered as flip cards",
+        "Fetches Wikipedia or academic source for CAP theorem",
+        "Visual Model appropriate for a comparison concept (table or Venn-style diagram)",
+        "Deeper section collapsed in <details>",
+        "Recall is interactive quiz with reveal buttons",
+        "Entry saved and opened"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "teach me Rust lifetimes. I've been writing Rust for 2 years, I get the basics, want to understand the borrow checker internals",
+      "expected_output": "Calibration inferred as Working from context. Advanced explanation targeting L3-L4 Bloom. Dense diagram, expanded Deeper section, open-ended recall with no reveal",
+      "calibration": "working (inferred)",
+      "topic_domain": "programming language",
+      "checks": [
+        "Calibration inferred as Working without asking (2 years + explicit 'want internals')",
+        "Fetches doc.rust-lang.org/stable/ (not just Wikipedia)",
+        "Key Components collapsed in <details> (not flip cards)",
+        "Deeper section expanded by default (not in <details>)",
+        "Recall is open-ended, no reveal button",
+        "Visual is dense (comparison table or algorithm trace), not a beginner-paced animation",
+        "Entry saved and opened"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "explain the concept of compound interest",
+      "expected_output": "Non-technical topic: math/finance. Fetches appropriate source (NIST/Britannica). Visual is a parametric SVG chart showing growth curve with slider for rate. No codebase assumed.",
+      "calibration": "some (default)",
+      "topic_domain": "mathematics/finance",
+      "checks": [
+        "Detects non-technical/math domain, uses appropriate source (Britannica, NIST, or similar)",
+        "Does not try to read package.json or Cargo.toml for topic resolution",
+        "Visual Model uses parametric SVG chart or growth diagram, not a code-centric visual",
+        "Concrete Example uses a real-world scenario (e.g., $1000 at 5% over 10 years), not code",
+        "Entry saved and opened"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "/teach-me react server components",
+      "expected_output": "Uses context7 for React docs. Entry saved. Follow-up 'still don't get it' should trigger escalation to analogy/ELI5 without repeating same explanation.",
+      "calibration": "some (default)",
+      "topic_domain": "programming/framework",
+      "follow_up": "still don't get it, can you use a simpler analogy?",
+      "checks": [
+        "context7 resolve-library-id called for React before answering",
+        "Initial explanation uses 7-section skeleton",
+        "On follow-up 'still don't get it': switches tactic (analogy or ELI5), does NOT repeat same explanation",
+        "On escalation: re-renders Visual Model section with '(revised — alternate explanation)' suffix",
+        "Entry updated: updated: date bumped, index.html re-rendered"
+      ]
+    }
+  ]
+}
