@@ -258,22 +258,23 @@ For non-technical topics: a specific, concrete real-world instance of the concep
 ### 4. Visual Model
 Feynman-simple explanation of the mental model + a mandatory visual chosen by concept shape.
 
-**Select the visual type from this catalog:**
+**Select the visual type** using this decision algorithm:
 
-| Concept shape | Visual type | Key implementation |
-|---|---|---|
-| Data flow / pipeline | Animated particle graph | SVG paths + `requestAnimationFrame` + `getPointAtLength` |
-| State machine / lifecycle | Interactive FSM | SVG nodes, click triggers CSS class swap + transition flash |
-| N-way comparison | Heatmap table ± radar SVG | HSL color interpolation from `data-score` attributes |
-| Time sequence / protocol | Step-reveal sequence diagram | SVG lifelines + opacity transitions + Next button |
-| Hierarchy / tree | Collapsible CSS tree | `<details>`/`<summary>` or `scrollHeight` accordion |
-| Before/after | Tab toggle or draggable split | `mousedown`/`mousemove` → CSS var `--split` |
-| Concept map | Force-directed graph | Spring simulation in `rAF` on SVG or canvas |
-| Algorithm trace | Code highlight + data structure viz | Snapshot array + step counter + CSS transitions |
-| Math relationship | Parametric SVG chart | `scaleX`/`scaleY` + range input → redraw path |
-| Mental model / analogy | Annotated scene with click-to-reveal labels | CSS `position: absolute` overlays + toggle class |
+1. Ask: *what is the single most important thing the learner needs to see?*
+   - A thing flowing through stages → **Data flow**
+   - A thing changing state in response to events → **State machine**
+   - Multiple options the learner needs to pick between → **N-way comparison**
+   - Events happening in a specific time order → **Time sequence**
+   - Parts nested inside parts → **Hierarchy / tree**
+   - What it looked like before vs after a transformation → **Before/after**
+   - How concepts relate to each other → **Concept map**
+   - Each step of a procedure → **Algorithm trace**
+   - How changing one variable affects another → **Math relationship**
+   - A real-world parallel to an abstract concept → **Mental model / analogy**
 
-See `references/pedagogy.md § Visual type catalog` for full implementation patterns.
+2. If the concept fits two types equally: pick the one that shows the *core insight* (the thing the learner most often gets wrong), not just any applicable type.
+
+3. Full implementation patterns for each type: see `references/pedagogy.md § Visual type catalog`.
 
 **Complexity scales with calibration level:**
 - None: animated step-by-step with "Next" button required (never auto-advance)
