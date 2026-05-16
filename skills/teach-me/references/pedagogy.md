@@ -1,108 +1,287 @@
-# Pedagogy reference — methods used by /teach-me
+# Pedagogy reference — /teach-me theoretical framework
 
-The 6-section entry skeleton is the *delivery container*. The methods below are the *tactics* you apply within each section. Pick adaptively based on the concept's shape, not a fixed mapping.
+Sources: Mayer (2009) *Multimedia Learning*, Anderson & Krathwohl (2001) *A Taxonomy for Learning, Teaching, and Assessing*, Sweller (1988) Cognitive Load Theory, Paivio (1971) Dual Coding Theory.
 
-## 0. Dual-audience writing (overrides everything below)
+---
 
-Every entry serves **the student** (revisit / recap) AND **third parties** (colleagues, study group, blog readers). Apply the methods below through this lens:
+## 0. Dual-audience writing (overrides everything)
 
-- **No session breadcrumbs.** "Earlier you asked", "we saw above in chat", "your repo at..." — all banned in saved entries. Use neutral, published-article voice.
-- **Self-contained examples.** Code from the student's repo must include the excerpt inline and a one-line description of what the file is, so a reader without the repo follows along. The `file:line` ref is a bookmark for the student, not a prerequisite for the reader.
-- **Define on first use.** No assumption the reader has read prior entries — link them via cross-links, but the current entry must still parse standalone.
-- **Tone register.** Warm and clear, like a well-written technical blog post. Not casual, not academic, not lecturing.
-- **Litmus test.** Could the student publish this entry on a personal blog tomorrow, unedited? If no, the entry isn't ready to save.
+Every entry serves **the student** (revisit / recap) AND **third parties** (colleagues, blog readers). Both simultaneously.
 
-The student's learning journey (what confused them, what clicked) does NOT appear in the artifact. Recap value lives in *content quality*, not in session memory of how the explanation was reached.
+- No session breadcrumbs ("earlier you asked", "we saw above in chat", "your repo at...") — banned in saved entries.
+- Self-contained examples: code from student's repo includes excerpt inline + one-line file description.
+- Define on first use: no assumption the reader has read prior entries — link them, but the entry parses standalone.
+- Tone: warm and clear, like a well-written technical blog post. Not casual, not academic.
+- Litmus test: could the student publish this entry on a personal blog tomorrow, unedited? If no, rewrite.
 
-## 1. Feynman technique
+---
 
-**Idea.** Explain the concept in the simplest possible language, as if to someone who has never heard of it. Where you hand-wave or use jargon without grounding it, that's a gap in your own understanding — close the gap with a simpler word or a concrete example.
+## 1. Mayer's Multimedia Learning Theory (primary spine)
 
-**Where it goes.** **Mental model** section. Lead with one or two sentences a child could parse, then introduce a single piece of jargon at a time with a concrete grounding.
+**Basis**: Cognitive Theory of Multimedia Learning (CTML). Three axioms:
+- **Dual-channel**: visual and verbal channels are separate in working memory.
+- **Limited capacity**: each channel holds ~4 chunks maximum.
+- **Active processing**: learning requires selecting, organizing, and integrating information.
 
-**Anti-pattern.** "It's basically a higher-order asynchronous primitive that decouples..." → no. Try: "Imagine you ordered a pizza. You don't stand at the door. You go do other things until the doorbell rings. A Promise is the receipt."
+The 12 principles fall into 3 groups:
 
-## 2. Concrete-before-abstract
+### Group A — Reduce extraneous processing
 
-**Idea.** Show one fully-worked example first, then generalise. Brains parse the general rule far easier *after* seeing a specific instance, not before.
+**1. Coherence** (d=0.86): exclude extraneous words, pictures, sounds. No decorative images, background music, or interesting-but-irrelevant tangents. Every visible element must map to a learning objective.
+- HTML rule: no decorative `<img>`, no background audio, no seductive-detail sidebars.
 
-**Where it goes.** **Concrete example** comes before **Mental model** in the skeleton for this reason. Always.
+**2. Signaling** (d=0.41): add cues that highlight the organization of essential material. Numbered steps, arrows, highlights on the active diagram region.
+- HTML rule: highlight currently-explained SVG region via JS class swap; use step counters ("Step 2 of 4"); bold key terms at first introduction.
 
-**How to apply.** If the user has a codebase, pull the example from their files with `file:line` refs. If not, write the tiniest runnable snippet that exercises the concept once.
+**3. Redundancy** (d=0.86): do not pair narration with its verbatim transcript on screen. Short labels anchored to diagram elements are fine — they don't duplicate narration.
+- HTML rule: if using `<audio>`, do NOT show the full script as visible `<p>` simultaneously. Provide a collapsed `<details>` transcript instead.
 
-**Anti-pattern.** Definition-first ("Server Components are React components that...") with no code visible for 200 words. The user is already lost.
+**4. Spatial Contiguity** (d=1.10 — highest in group): place corresponding words and pictures near each other. Never put a caption at the bottom of a page when the diagram is at the top.
+- HTML rule: labels inside `<svg>` using `<text>` elements adjacent to what they describe. `<figcaption>` immediately below `<figure>`, never in a separate column.
 
-## 3. Scaffolding
+**5. Temporal Contiguity** (d=1.22 — highest overall): present animation and narration simultaneously, not sequentially. Never show the full animation then play audio.
+- HTML rule: if using audio, use `audio.ontimeupdate` + a cue array to trigger CSS class changes on diagram elements in sync. If no audio, animate diagram regions in sync with auto-advancing text using `setInterval` or scroll-triggered reveals.
 
-**Idea.** Connect new knowledge to something the user already knows. Build the new concept on top of an existing mental model, not in a vacuum.
+### Group B — Manage essential processing
 
-**Where it goes.** **Mental model** + **Cross-links**. Lead the mental model with "you already know X, this is X but with Y added" when an analogue exists in the book or in common programming knowledge.
+**6. Segmenting** (d=0.70): present content in learner-paced segments. Never auto-advance. Require explicit "Next" button click.
+- HTML rule: JS step array; only the current step is visible. Show progress indicator ("Section 2 of 5"). Never auto-advance.
 
-**How to apply.** Check `INDEX.md` before writing a new entry. If a related entry exists, *use it as scaffolding*: reference it in the mental model, then cross-link it.
+**7. Pre-training** (d=0.46): learners learn better when they know the names and characteristics of key concepts beforehand.
+- HTML rule: Section 2 (Key Components) introduces all terms before the main explanation. Never use a term in sections 3–7 that wasn't defined in section 2.
 
-**Anti-pattern.** Treating each concept as standalone. Causes islanded knowledge that doesn't transfer.
+**8. Modality** (d=0.72): graphics + spoken narration > graphics + on-screen text (when both compete for visual attention). Exception: code, equations, non-native language.
+- HTML rule: prefer `<audio>` narration + visual over dense text + visual. For code-heavy content (exception applies), on-screen text is acceptable.
 
-## 4. Dual coding
+### Group C — Foster generative processing
 
-**Idea.** Pair verbal explanation with a visual representation. The brain encodes both channels and retrieval is stronger from either cue.
+**9. Multimedia** (d=1.67): words + pictures > words alone. Every process, structural, or relational concept needs a visual.
+- HTML rule: no entry section consists only of `<p>` elements for a process concept. Minimum one diagram per concept introduced.
 
-**Where it goes.** **Mental model** + **Deeper** sections. Every entry should have at least one visual.
+**10. Personalization** (d=1.11): conversational style > formal academic style.
+- HTML rule: second-person ("you", "your", "you'll"), contractions, conversational openers ("Let's look at...", "Here's the tricky part...").
 
-**Visual options (pick by shape):**
+**11. Voice** (d=0.74): human voice > machine-synthesized voice for narration.
+- HTML rule: prefer pre-recorded audio. If using `SpeechSynthesis` API, select highest-quality local voice with `voices.find(v => v.localService && v.lang === 'en-US')`.
 
-| Concept shape | Visual |
-|--------------|--------|
-| Data flow / pipeline | ASCII flow diagram in `<pre class="diagram">` |
-| Comparison of N approaches | `<table class="compare">` with rows = facets, cols = options |
-| Procedural sequence | Numbered list + small diagram showing state evolution |
-| Hierarchy / tree | Indented ASCII tree |
-| Before/after refactor | Two code blocks side-by-side in prose, or stacked with `// before` / `// after` markers |
+**12. Image** (d≈0): instructor face/avatar on screen adds no learning benefit; can be distracting.
+- HTML rule: no talking-head overlay, no persistent mascot during explanation. A text byline is sufficient attribution.
 
-**Anti-pattern.** Wall-of-text explanation with zero visual. Even a 3-row table beats prose for comparison concepts.
+### Quick-reference: principle → concern
 
-## 5. Active recall
+| Concern | Governing principles |
+|---|---|
+| Animations | Temporal Contiguity (#5), Signaling (#2), Coherence (#1) |
+| Diagrams | Spatial Contiguity (#4), Multimedia (#9), Signaling (#2) |
+| Text placement | Spatial Contiguity (#4), Redundancy (#3), Modality (#8) |
+| Pacing / sequencing | Segmenting (#6), Pre-training (#7) |
+| Tone | Personalization (#10) |
+| Content selection | Coherence (#1) |
 
-**Idea.** Forcing retrieval cements memory more than re-reading. The act of trying to answer — even if you fail — strengthens the neural path.
+---
 
-**Where it goes.** **Recall** section. 1–2 questions per entry. No more, or the user skips them.
+## 2. Bloom's Taxonomy — calibration mapping
 
-**Question rules:**
-- Specific, not vague. *"What happens if you forget `'use client'` in a component that calls `useState`?"* > *"How do client components work?"*
-- Testable in the user's head, no need to run code.
-- Lead with how / why / what-if. Avoid yes/no.
-- Never provide the answer in the entry. The retrieval attempt is the value.
+Source: Anderson & Krathwohl (2001) revision of Bloom (1956).
 
-**Anti-pattern.** Quiz questions copying the heading. *"Q: What is a Server Component?"* — that's a definition prompt, not recall.
+| Level | Cognitive operation | Example question types |
+|---|---|---|
+| L1 Remember | Recall, recognize, list, define | "What are the three components of X? List them." |
+| L2 Understand | Explain, summarize, compare, paraphrase | "Explain how X works in your own words." |
+| L3 Apply | Use, execute, implement, solve | "Given this scenario, how would you apply X?" |
+| L4 Analyze | Differentiate, deconstruct, trace, examine | "Break this process into components. Which step is most critical?" |
+| L5 Evaluate | Judge, justify, critique, recommend | "Which approach is better for [use case]? Justify with criteria." |
+| L6 Create | Design, formulate, construct, invent | "Design a solution using what you've learned." |
 
-## 6. Cognitive load management
+**Calibration → Bloom target:**
 
-**Idea.** Working memory is small (≈4 chunks). Overload it and learning stops. Chunk the entry so each section is one idea.
+| User answers | Bloom target | Instruction style |
+|---|---|---|
+| None | L1–L2 | Define terms first (Pre-training #7), analogy + diagram, interactive quiz with feedback |
+| Some | L2–L3 | Skip raw definitions, go to worked example, step-paced reveal |
+| Working | L3–L4 | Lead with non-obvious edge case, dense comparison, open-ended recall |
 
-**Where it goes.** All sections. The 6-section skeleton itself is a load-management device — each section has one job.
+---
 
-**How to apply.**
-- One concept per section. If a section starts sprouting sub-concepts, that's a signal to **extend** the entry with new sections, or split off a **new entry** and cross-link.
-- Defer edge cases to **Deeper** (which is a `<details>` block — collapsed by default).
-- Use the **Hook** to set up *why* this matters before diving in. Without the why, the user can't hold the rest in working memory because they don't know what they're holding it for.
+## 3. Cognitive Load Theory — pacing rules
 
-## 7. Adaptive escalation
+Source: Sweller (1988). Working memory holds ≈4 chunks. Overload stops learning.
 
-**Idea.** If the user says "still don't get it" / "simpler please" / "another angle", do not repeat the same explanation louder. Switch the tactic.
+- **One concept per section**: if a section sprouts sub-concepts, extend the entry (new H2) or split to a new entry + cross-link.
+- **Defer edge cases**: edge cases live in Section 5 (Deeper), collapsed for beginners. They are not suppressed — they're deferred.
+- **Hook sets the why**: without a clear "why this matters", the learner can't hold subsequent information in working memory because they don't know what they're holding it for.
+- **Pre-training reduces intrinsic load**: introducing terms before the main explanation splits the cognitive work across time.
 
-**Escalation ladder (try in order):**
-1. **Different concrete example** — same concept, new code.
-2. **Analogy from outside programming** — pizza, mail, post office, library, restaurant.
-3. **ELI5** — strip all jargon, use the smallest words, accept lossy precision.
-4. **Inverse approach** — "let's look at what happens when this *isn't* there". Shows the value by absence.
-5. **Step-by-step trace** — walk the runtime execution one operation at a time.
+---
 
-After switching, re-render the affected sections of the entry (usually **Mental model**) with the new angle, and append a note to the section heading: *"Mental model (revised after second look)"*.
+## 4. Visual type catalog
 
-## What NOT to do
+Select by concept shape. Implement with vanilla JS/CSS/SVG only (no CDN).
 
-- Don't over-explain. If a concept fits in 4 sentences, use 4 sentences. The book is denser the more it ships.
-- Don't editorialise ("this is a really cool feature"). Stay neutral; teach the concept.
-- Don't gate-keep. If the user asks something that seems "too basic", that's exactly the kind of entry the book needs.
-- Don't paste official docs verbatim. Synthesise. The book's value is the *re-explanation*, not the copy.
-- Don't make recall questions that are really mini-quizzes for facts. Questions test *mental model*, not trivia.
-- Don't address the student directly in the entry ("you asked", "your code", "remember when"). The artifact must read as if written for a general audience. Address-the-reader phrasing in the *chat reply* is fine; in the saved entry it breaks the third-party-readable contract.
+**Data flow / pipeline**
+- Visual: animated directed graph — nodes as `<rect>`/`<circle>`, edges as `<path marker-end="url(#arrow)">`, data packets as `<circle>` animated along paths using `SVGPathElement.getTotalLength()` + `getPointAtLength(t)` inside `requestAnimationFrame`.
+- Mayer rules: Signaling (highlight active node), Segmenting (step-by-step with Next button, not auto-play).
+- Implementation: pause on each node to show processing. Use `stroke-dashoffset` animation for edge "flow" effect.
+
+**State machine / lifecycle**
+- Visual: interactive FSM — SVG nodes with `.active` CSS class, click triggers CSS class swap + edge `stroke` flash.
+- Mayer rules: Pre-training (label all states before simulation), Signaling (active state color).
+- Implementation: JS state object + transition table. Keyboard input box lets user trigger events by name.
+
+**N-way comparison**
+- Visual: HTML `<table class="compare">` for ≤6 attributes; radar SVG polygon for N>4 options on many axes.
+- Mayer rules: Coherence (no decorative icons), Signaling (bold the winner row or color-code scores).
+- Implementation: `td[data-score]` → HSL color interpolation: `hsl(${score * 1.2}, 70%, 85%)` for heatmap.
+
+**Time sequence / protocol**
+- Visual: step-reveal sequence diagram — SVG vertical lifelines, horizontal arrow messages revealed one at a time.
+- Mayer rules: Segmenting (never show all messages at once), Signaling (highlight active lifeline column).
+- Implementation: opacity 0→1 transitions triggered by step counter. Never auto-play. Show "Step N of M".
+
+**Hierarchy / tree**
+- Visual: collapsible nested `<ul>` with CSS connecting lines (no SVG needed for most cases).
+- Mayer rules: Pre-training (explain node types before rendering the full tree), Coherence (suppress leaf details initially).
+- Implementation: `<details>`/`<summary>` for zero-JS collapse; or JS `scrollHeight` toggle for smooth animation.
+  ```css
+  .tree ul { padding-left: 1.5em; border-left: 1px solid var(--border); }
+  .tree li::before { content:''; position:absolute; left:-1px; top:0.8em; width:1em; height:1px; background:var(--border); }
+  ```
+
+**Before/after transformation**
+- Visual: tab toggle (accessible, recommended) or draggable split divider.
+- Mayer rules: Spatial Contiguity (before/after must be adjacent), Signaling (highlight changed regions).
+- Implementation (draggable): `mousedown` on `.divider` → `mousemove` → update CSS var `--split` → `.before { width: var(--split, 50%) }`.
+
+**Concept map / knowledge graph**
+- Visual: force-directed graph on `<canvas>` (>30 nodes) or inline `<svg>` (<30 nodes). Clickable nodes show detail panel.
+- Mayer rules: Coherence (show 8–12 node subgraph first, not the full graph), Signaling (highlight neighbors on hover).
+- Implementation: spring simulation — repulsion (inverse square) + attraction along edges (spring) + center gravity + damping (velocity × 0.85) in `requestAnimationFrame` loop.
+
+**Algorithm trace**
+- Visual: split pane — code on left with line highlight, data structure visualization on right (array cells as `<div>` blocks with CSS transitions on value/color changes). Step controls at bottom.
+- Mayer rules: Temporal + Spatial Contiguity (code highlight synchronized with visualization), Segmenting (learner controls stepping).
+- Implementation: record all steps upfront as snapshot array `[{lineNum, arrayState, explanation}]`. Playback via step counter.
+
+**Mathematical/statistical relationship**
+- Visual: interactive SVG chart — parametric curves, sliders change parameters and SVG path re-renders.
+- Mayer rules: Multimedia (strong support), Spatial Contiguity (axis labels adjacent to axes), Coherence (minimal grid lines).
+- Implementation: `scaleX`/`scaleY` helpers map data domain to SVG pixels. `pathFromFn(f, xMin, xMax, steps=200)` generates `<path d>`. Wire to `<input type="range">` → redraw.
+
+**Mental model / analogy**
+- Visual: layered annotated illustration — familiar objects (pipes, rooms, gears) mapped to abstract concepts. Click/hover reveals the mapping label.
+- Mayer rules: Coherence (only use concrete elements that map 1:1 to the abstract concept — metaphor can become seductive detail), Signaling (make connection arrows between familiar object and abstract label prominent).
+- Implementation: `<div class="analogy-object">` with `position:absolute` label overlays toggled by click.
+
+---
+
+## 5. Source research protocol by domain
+
+Priority order: fetch the highest-priority source available before teaching.
+
+**Software libraries / frameworks**
+1. context7 MCP (`resolve-library-id` → `query-docs`) — version-specific API reference
+2. Official docs URL for the library
+3. GitHub CHANGELOG + RFCs for unreleased behavior
+
+**Programming languages**
+- Python: docs.python.org/3/ + peps.python.org
+- Rust: doc.rust-lang.org/stable/ + docs.rs (crates)
+- Go: pkg.go.dev + go.dev/doc/
+- JS/TS: tc39.es/ecma262/ + typescriptlang.org/docs/ + developer.mozilla.org
+- Web APIs: developer.mozilla.org + w3.org/TR/ + html.spec.whatwg.org
+
+**CS concepts / algorithms / protocols**
+- Wikipedia (definition + complexity)
+- ACM Digital Library (dl.acm.org) — originating papers
+- IEEE Xplore (ieeexplore.ieee.org) — networking, systems
+- IETF RFCs (rfc-editor.org) — HTTP, TLS, QUIC, DNS
+- NIST (csrc.nist.gov) — security standards
+
+**Mathematics**
+- NIST DLMF (dlmf.nist.gov) — special functions, canonical
+- Wolfram MathWorld (mathworld.wolfram.com)
+- arXiv.org/math/ — current research
+
+**Natural sciences**
+- Biology: PubMed (pubmed.ncbi.nlm.nih.gov) + PubMed Central
+- Physics/Chemistry: arXiv.org + NIST (nist.gov/webbook)
+- Any: flag preprints (bioRxiv, arXiv) as not peer-reviewed
+
+**Social sciences / humanities**
+- JSTOR (jstor.org)
+- Encyclopaedia Britannica (britannica.com)
+- Primary sources: govinfo.gov, official government data
+- Economics: NBER (nber.org), IMF, World Bank
+
+**context7 usage rules:**
+- Use for software libraries/frameworks — not for CS concepts, science, or math
+- Max 3 `query-docs` calls per question
+- Skip `resolve-library-id` if you already know the exact ID (e.g., `/vercel/next.js`)
+- Falls back to WebFetch on official docs URL if library not indexed
+
+---
+
+## 6. Adaptive recall rules
+
+**None/Some calibration — interactive quiz:**
+- 2 closed questions: multiple-choice or true/false. Show options. Click answer → reveal correct + 1-sentence explanation.
+- 1 open-ended "what would happen if…": click "Show answer" → reveal model answer.
+- Questions test *mental model*, not trivia. Lead with: "what happens if", "why does", "what's the difference between".
+- Question rules: specific not vague, testable in the learner's head, avoids yes/no, never copies the heading as the question.
+
+**Working calibration — open-ended only:**
+- 1–2 "what would happen if…" or "how would you approach…" questions.
+- No reveal button. No answers given. Genuine retrieval is the point — feedback would short-circuit it.
+- Target Bloom L4: "Trace what happens when [assumption] is violated."
+
+**Anti-patterns to avoid:**
+- "Q: What is X?" — definition prompt, not recall.
+- "Q: Did we cover Y?" — yes/no, no cognitive work.
+- Providing the answer in the question stem.
+- More than 3 questions total — user skips them.
+
+---
+
+## 7. Reference book UX patterns (static HTML, vanilla JS)
+
+**Client-side search** (dictionary-speed lookup):
+- Build in-memory inverted index on load: tokenize title + summary + tags → word → Set of entry IDs.
+- Search: intersection of result sets (AND logic). Debounce 150ms.
+- Performance target: <5ms for ≤2000 entries with in-memory index.
+
+**Cross-linking**:
+- Within topic: `href="../<slug>/index.html"`. Within global index: `href="<topic>/entries/<slug>/index.html"`.
+- Hover preview: on `<a data-entry="slug">` hover, render popover with entry title + summary using `getBoundingClientRect()`.
+- History: `history.pushState` + `popstate` for back-button navigation without page reload.
+
+**Tag filtering**:
+- `data-tags="tag1 tag2"` on each entry card.
+- Multi-select: `Set` of active tags, AND logic (`every(t => entryTags.has(t))`). Toggle with OR: `.some()`.
+- URL sync: `?tags=react,server` via `URLSearchParams` + `history.replaceState`.
+- Toggle `element.hidden` (faster than class + CSS for large lists).
+
+**Progressive disclosure**:
+- Native `<details>`/`<summary>` for Deeper section — zero JS, keyboard accessible.
+- Smooth animation: `details[open] .content { max-height: 500px; transition: max-height 0.3s ease; }` or measure `scrollHeight` before animating.
+- Three-tier model: title + gloss (always visible) → `<details>` explanation → full article link.
+
+**Dark mode**:
+- CSS custom properties on `:root`, override on `[data-theme="dark"]`.
+- Anti-flash inline script in `<head>` reads `localStorage` before first paint.
+- System preference listener: `matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ...)`.
+- `color-scheme: light` / `dark` on `:root` for native browser controls.
+
+---
+
+## 8. What NOT to do
+
+- Over-explain. If it fits in 4 sentences, use 4 sentences.
+- Editorialise ("this is a really cool feature"). Stay neutral.
+- Gate-keep. If it seems "too basic", that's exactly what the book needs.
+- Paste official docs verbatim. Synthesise.
+- Make recall questions that test trivia rather than mental model.
+- Address the student directly in the saved entry ("you asked", "your code"). Article register in artifact; conversational in chat is fine.
+- Use a visual because it looks impressive. Every visual must serve comprehension (Coherence #1).
+- Show all steps of an animation at once. Always segment (Segmenting #6).
+- Place diagram labels far from what they describe (Spatial Contiguity #4).
+- Teach without fetching current official sources first.
