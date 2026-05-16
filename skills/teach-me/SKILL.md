@@ -69,6 +69,11 @@ This level governs: visual complexity, pre-training depth, Deeper section visibi
 
 **Never rely solely on training data. Always fetch official primary sources first.**
 
+**Scale research to concept complexity:**
+- **Foundational concept** ("what is a variable", "what is recursion") → one authoritative source is enough. Don't hit academic papers for things with stable, universal definitions.
+- **Library/framework API** ("how does useEffect work", "Rust lifetimes") → fetch current official docs. APIs change; training data goes stale.
+- **Complex/domain-specific** ("how does the V8 garbage collector work", "CAP theorem proof") → full source hierarchy. Multiple sources, cite all.
+
 ### Source decision tree
 
 ```
