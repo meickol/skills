@@ -272,9 +272,38 @@ Serves **two audiences**: the student revisiting for recap, and a third party (c
     });
 
     // ── Step-reveal controls (for animated diagrams) ──────────────
-    const steps = []; // Populate with [{show: '#step-1', explanation: '...'}, ...]
-    // INSTRUCTION: fill `steps` array from the specific visual type being rendered.
-    // Each step object: { activate: ['.css-selector'], deactivate: ['.css-selector'], explanation: 'text' }
+    // Populate `steps` at render time based on visual type. Examples:
+    //
+    // TIME SEQUENCE (e.g., TCP handshake):
+    // const steps = [
+    //   { activate: ['#msg-syn', '#node-client'],  explanation: 'Client sends SYN packet to initiate connection.' },
+    //   { activate: ['#msg-synack', '#node-server'], explanation: 'Server responds with SYN-ACK, acknowledging the request.' },
+    //   { activate: ['#msg-ack', '#node-client'],   explanation: 'Client sends ACK. Three-way handshake complete.' },
+    // ];
+    //
+    // STATE MACHINE (e.g., promise lifecycle):
+    // const steps = [
+    //   { activate: ['#state-pending'],  explanation: 'Promise starts in Pending — async work is running.' },
+    //   { activate: ['#state-fulfilled'], explanation: 'If work succeeds, transitions to Fulfilled. .then() handlers run.' },
+    //   { activate: ['#state-rejected'],  explanation: 'If work fails, transitions to Rejected. .catch() handlers run.' },
+    // ];
+    //
+    // ALGORITHM TRACE (e.g., bubble sort step i=0):
+    // const steps = [
+    //   { activate: ['#cell-0', '#cell-1'], explanation: 'Compare index 0 (5) and index 1 (3). 5 > 3, so swap.' },
+    //   { activate: ['#cell-1', '#cell-2'], explanation: 'Compare index 1 (5) and index 2 (8). 5 < 8, no swap.' },
+    // ];
+    //
+    // DATA FLOW (e.g., HTTP request pipeline):
+    // const steps = [
+    //   { activate: ['#node-browser', '#edge-0'], explanation: 'Browser sends HTTP GET request.' },
+    //   { activate: ['#node-cache', '#edge-1'],  explanation: 'CDN cache checks for a cached response.' },
+    //   { activate: ['#node-origin'],            explanation: 'Cache miss — request forwarded to origin server.' },
+    // ];
+    //
+    // Each step: activate = array of CSS selectors to add .active class to.
+    // All .step-el elements start with opacity 0.25; .active brings them to full opacity.
+    const steps = []; // ← Replace with actual steps for the concept being rendered
     let currentStep = 0;
     const stepNum = document.getElementById('step-num');
     const stepTotal = document.getElementById('step-total');
@@ -306,9 +335,16 @@ Serves **two audiences**: the student revisiting for recap, and a third party (c
 
     // ── Cross-link hover preview ──────────────────────────────────
     const popover = document.getElementById('link-popover');
-    // Requires entryData object: { 'slug': { title, summary } }
-    // INSTRUCTION: populate entryData from the related entries' frontmatter at render time.
-    const entryData = {}; // { 'server-components': { title: '...', summary: '...' } }
+    // Populate entryData at render time: for each slug in `related:` frontmatter,
+    // read ~/.claude/teaching/<topic>/entries/<slug>/source.md and extract:
+    //   - title: the `title:` frontmatter field
+    //   - summary: the one-liner from that entry's INDEX.md row (text after " — ")
+    // Example (rendered inline at build time, not fetched at runtime):
+    // const entryData = {
+    //   'event-loop':   { title: 'Event Loop',   summary: 'How JavaScript schedules async callbacks via a single-threaded queue.' },
+    //   'promises':     { title: 'Promises',     summary: 'An object representing the eventual completion or failure of async work.' },
+    // };
+    const entryData = {}; // ← Replace with actual related entry data
 
     document.querySelectorAll('[data-entry]').forEach(link => {
       link.addEventListener('mouseenter', e => {
@@ -360,6 +396,6 @@ Serves **two audiences**: the student revisiting for recap, and a third party (c
 
 **If a section is missing** in source.md: omit its rendered block entirely. Never render empty `<section>` tags.
 
-**The `steps` array** in the JS must be populated at render time with the specific step data for the visual being used. Comment it clearly.
+**The `steps` array**: populated at render time. See the commented examples in the `<script>` block above for the exact object shape per visual type (time sequence, state machine, algorithm trace, data flow). Every step has: `activate` (array of CSS selectors to highlight) + `explanation` (shown in `.step-explanation` below the diagram).
 
-**The `entryData` object** must be populated at render time with title + summary for each slug in `related:` frontmatter. Read those slugs' `source.md` to get the data.
+**The `entryData` object**: populated at render time. For each slug in the entry's `related:` frontmatter field: read `~/.claude/teaching/<topic>/entries/<slug>/source.md` → extract `title:` field; read `~/.claude/teaching/<topic>/INDEX.md` → extract the description text for that slug (text after the ` — ` on that slug's line). Inline both as a JS object literal — do not fetch at runtime.
