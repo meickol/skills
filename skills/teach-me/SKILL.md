@@ -267,6 +267,18 @@ Lets the learner verify currency of the information.
 - 1–2 "what would happen if…" or "how would you approach…" questions
 - No reveal button. No answers given. Forcing genuine retrieval is the point.
 
+## When the learner doesn't understand
+
+If the user says "still don't get it", "simpler please", "another angle", "ELI5", or any similar signal: do NOT repeat the same explanation louder. Switch tactic. Try this ladder in order until something clicks:
+
+1. **Different concrete example** — same concept, entirely new code or scenario from a different domain.
+2. **Real-world analogy** — explain using something from outside the subject: pizza delivery, libraries, post offices, traffic lights, plumbing. Accept lossy precision.
+3. **ELI5** — strip all jargon. Use the smallest possible words. One sentence per idea.
+4. **Inverse approach** — show what *breaks* when the concept is absent. Absence reveals value faster than presence does.
+5. **Step-by-step trace** — walk execution or logic one operation at a time. No skipping. No summarising.
+
+After switching tactic: re-render the **Visual Model** section (Section 4) of the saved entry with the new angle. Append to its H2: *(revised — alternate explanation)*. Update `updated:` in `source.md` frontmatter and re-render `index.html`.
+
 ## Step 8: HTML rendering
 
 Do NOT call `/html` — skills cannot invoke each other. Follow `templates/entry-prompt.md` for entry HTML and `templates/index-prompt.md` for landing pages.

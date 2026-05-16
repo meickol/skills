@@ -221,7 +221,26 @@ Priority order: fetch the highest-priority source available before teaching.
 
 ---
 
-## 6. Adaptive recall rules
+## 6. Adaptive escalation — when the learner doesn't understand
+
+If the user signals confusion ("still don't get it", "simpler", "another angle", "ELI5"), do NOT repeat the same explanation. Switch tactic using this ordered ladder:
+
+| Step | Tactic | When to use |
+|---|---|---|
+| 1 | Different concrete example | Same concept, new domain or language |
+| 2 | Real-world analogy | Anything involving cause/effect, flow, or containment |
+| 3 | ELI5 | When jargon is the blocker, not the concept |
+| 4 | Inverse approach | When "why it matters" isn't landing — show what breaks without it |
+| 5 | Step-by-step trace | When the learner can't follow the sequence — slow down completely |
+
+After switching: re-render the Visual Model section of the saved entry with the new angle. Append *(revised — alternate explanation)* to its H2. Update `updated:` and re-render `index.html`.
+
+**Anti-patterns:**
+- Repeating the same explanation more slowly — no new information, more frustrating.
+- Jumping straight to ELI5 — it's lossy precision; try a better example first.
+- Switching tactic AND adding more content simultaneously — isolate the variable.
+
+## 7. Adaptive recall rules
 
 **None/Some calibration — interactive quiz:**
 - 2 closed questions: multiple-choice or true/false. Show options. Click answer → reveal correct + 1-sentence explanation.
