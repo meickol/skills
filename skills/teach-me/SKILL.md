@@ -209,10 +209,13 @@ If **expand**: read `source.md`, decide *extend* (same concept, new H2) vs *new 
 8. Regenerate `~/.claude/teaching/global-index.json` from GLOBAL_INDEX.md (see Step 9).
 9. Regenerate `~/.claude/teaching/global-index.html` global landing page.
 10. Regenerate topic `~/.claude/teaching/<topic>/index.html`.
-11. End with one prompt and stop:
+11. Open the entry in the browser:
+    - macOS: `open ~/.claude/teaching/<topic>/entries/<slug>/index.html`
+    - Linux: `xdg-open ~/.claude/teaching/<topic>/entries/<slug>/index.html`
+12. End with one prompt and stop:
     ```
-    Saved `<slug>` to `<topic>` book. Cross-linked: <list>.
-    Open? | Discard? | Rename slug? | Edit cross-links?
+    Saved `<slug>` to `<topic>` book. Opened in browser. Cross-linked: <list>.
+    Discard? | Rename slug? | Edit cross-links?
     ```
 
 **On discard**: delete entry dir, revert both INDEX files, revert bidirectional related edits, re-render affected HTML, regen global index.
