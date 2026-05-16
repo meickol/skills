@@ -407,6 +407,28 @@ Note: `id` is `"<topic>/<slug>"` (not just `"<slug>"`) to avoid collisions when 
 
 `/teach-me rebuild <topic>` — rebuild only that topic's entries + landing.
 
+## Follow-up handling
+
+If the user asks a follow-up about a concept immediately after a teach session (same session, same topic):
+
+- **Clarification** ("wait, what does X mean in that context?") → answer inline in chat. Do NOT restart the full skill flow. Append a brief note to the saved entry's source.md under a `## Clarifications` H2 if the clarification is substantive.
+- **Deeper dive** ("tell me more about X") → treat as an expand request (Step 6a expand flow). Check if it warrants a new entry or extending the current one.
+- **Unrelated new concept** ("now teach me Y") → fresh skill invocation. Full flow from Step 1.
+
+Avoid re-running calibration, re-fetching sources already fetched this session, or re-saving an entry that hasn't changed.
+
+## Topic slug rules
+
+Slugify topic names to lowercase kebab-case:
+- "machine learning" → `machine-learning`
+- "Next.js" → `nextjs`
+- "React Native" → `react-native`
+- "C++" → `cpp`
+- "Node.js" → `nodejs`
+- Single-word names unchanged: "rust", "python", "databases"
+
+Entry slug collision within a topic: if `promises` already exists in `nextjs/`, append a disambiguator (`promises-async-await`, `promises-error-handling`). Never overwrite an existing entry silently.
+
 ## Out of scope
 
 Do NOT add: spaced repetition scheduling, answer tracking across sessions, sync to remote. Do NOT auto-trigger on generic "explain"/"what is"/"what does X do" in isolation — require clear learning intent signal.
