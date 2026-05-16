@@ -40,13 +40,19 @@ Classify the request before doing anything else:
 
 If ambiguous: ask — "Are you trying to understand how X works, or accomplish something specific with X?"
 
-## Step 2: Calibration question
+## Step 2: Calibration
 
-Ask ONE question before researching:
+**Default to "Some" (L2–L3) and proceed without asking** unless one of these signals is present:
+- User explicitly says beginner/new/never used/don't know
+- User says expert/advanced/deep dive/internals
+- The concept is highly fundamental (e.g., "what is a variable") — default **None**
+- The concept is highly advanced/niche — default **Working**
+
+When asking is necessary (genuinely ambiguous AND calibration will materially change the output), ask ONE question only:
 
 > "What's your current level with **[concept]**?
 > - **None** — starting from zero
-> - **Some** — heard of it, used it once or twice
+> - **Some** — heard of it, used it once or twice *(default)*
 > - **Working** — use it regularly, want to go deeper"
 
 Map to Bloom's Taxonomy (see `references/pedagogy.md § Bloom calibration`):
